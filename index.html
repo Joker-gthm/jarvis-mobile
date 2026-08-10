@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#03141b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>J.A.R.V.I.S.</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="scanlines"></div>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">J.A.R.V.I.S. // MOBILE NODE</div>
+        <h1>WELCOME, HERR HAGEN</h1>
+      </div>
+      <div id="connectionBadge" class="badge offline">OFFLINE</div>
+    </header>
+
+    <section id="loginPanel" class="panel login-panel">
+      <div class="panel-title">SUPABASE AUTH</div>
+      <label>E-Mail<input id="email" type="email" autocomplete="username"></label>
+      <label>Passwort<input id="password" type="password" autocomplete="current-password"></label>
+      <button id="loginBtn" class="primary">ANMELDEN</button>
+      <div id="loginStatus" class="statusline">Bereit.</div>
+    </section>
+
+    <section id="appPanel" class="hidden">
+      <div class="reactor-wrap">
+        <div class="reactor">
+          <div class="ring ring1"></div>
+          <div class="ring ring2"></div>
+          <div class="ring ring3"></div>
+          <div class="core">J</div>
+        </div>
+        <div id="systemStatus" class="system-status">SYSTEMS NOMINAL</div>
+      </div>
+
+      <section class="panel command-panel">
+        <div class="panel-title">COMMAND CONSOLE</div>
+        <div class="command-row">
+          <input id="commandInput" placeholder="Befehl eingeben …" autocomplete="off">
+          <button id="sendBtn" class="primary">SENDEN</button>
+          <button id="micBtn" class="secondary" title="Mikrofonaufnahme starten/stoppen">🎙</button>
+        </div>
+        <div class="mic-tools">
+          <select id="micSelect" aria-label="Mikrofon auswählen">
+            <option value="">Standardmikrofon</option>
+          </select>
+          <div class="level-wrap"><div id="micLevel" class="level-bar"></div></div>
+          <span id="micLevelText">MIC 0%</span>
+        </div>
+        <div id="assistantReply" class="reply">Bereit, Herr Hagen.</div>
+      </section>
+
+      <div class="grid">
+        <section class="panel">
+          <div class="panel-title">CLOUD MEMORY</div>
+          <div class="mini-form">
+            <input id="memorySubject" placeholder="Betreff, z. B. Stefan">
+            <textarea id="memoryContent" placeholder="Fakt speichern …"></textarea>
+            <button id="memorySaveBtn" class="secondary">SPEICHERN</button>
+          </div>
+          <div id="memoryList" class="list"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title">ERINNERUNGEN</div>
+          <div class="mini-form">
+            <input id="reminderTitle" placeholder="Erinnerung">
+            <input id="reminderDue" type="datetime-local">
+            <button id="reminderSaveBtn" class="secondary">ANLEGEN</button>
+          </div>
+          <div id="reminderList" class="list"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title">ABFALLKALENDER</div>
+          <div id="wasteNext" class="big-info">Lade Termine …</div>
+          <div id="wasteList" class="list"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title">SESSION</div>
+          <div id="userInfo" class="kv"></div>
+          <button id="logoutBtn" class="danger">ABMELDEN</button>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

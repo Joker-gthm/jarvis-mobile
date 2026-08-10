@@ -1,0 +1,9 @@
+{
+  "name": "J.A.R.V.I.S. Mobile",
+  "short_name": "JARVIS",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#020b10",
+  "theme_color": "#03141b",
+  "description": "Mobile JARVIS-Oberfläche mit Supabase Cloud-Memory und sicherer OpenAI-Spracherkennung."
+}

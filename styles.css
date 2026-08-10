@@ -1,0 +1,55 @@
+
+:root{
+  --bg:#020b10;--panel:rgba(4,29,38,.82);--line:#1be7ff;--muted:#65aeb9;
+  --text:#dffbff;--glow:0 0 14px rgba(27,231,255,.38);
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 50% 0,#073142 0,#020b10 45%,#000 100%);color:var(--text);font-family:Consolas,ui-monospace,monospace;min-height:100vh}
+.shell{max-width:1100px;margin:auto;padding:18px}
+.topbar{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(27,231,255,.45);padding-bottom:12px}
+.eyebrow{color:var(--muted);font-size:.75rem;letter-spacing:.18em}
+h1{font-size:clamp(1.25rem,5vw,2rem);letter-spacing:.08em;margin:.3rem 0}
+.badge{border:1px solid;padding:6px 10px;border-radius:3px;font-size:.75rem}
+.badge.online{color:#9effd4;border-color:#35ff9a;box-shadow:0 0 10px rgba(53,255,154,.2)}
+.badge.offline{color:#ff9c9c;border-color:#ff6565}
+.panel{border:1px solid rgba(27,231,255,.35);background:var(--panel);padding:14px;margin-top:14px;box-shadow:inset 0 0 25px rgba(0,180,220,.05)}
+.panel-title{color:var(--line);font-weight:700;letter-spacing:.12em;margin-bottom:12px;text-shadow:var(--glow)}
+.login-panel{max-width:520px;margin:60px auto}
+label{display:block;color:var(--muted);font-size:.82rem;margin:10px 0}
+input,textarea{width:100%;background:#031117;color:var(--text);border:1px solid rgba(27,231,255,.35);padding:12px;font:inherit;outline:none}
+input:focus,textarea:focus{border-color:var(--line);box-shadow:var(--glow)}
+textarea{min-height:90px;resize:vertical}
+button{font:inherit;cursor:pointer;padding:11px 14px;border-radius:2px;letter-spacing:.04em}
+.primary{background:rgba(27,231,255,.14);color:var(--text);border:1px solid var(--line);box-shadow:var(--glow)}
+.secondary{background:transparent;color:var(--line);border:1px solid rgba(27,231,255,.5)}
+.danger{background:transparent;color:#ff9c9c;border:1px solid #ff6565}
+.statusline,.reply{color:#9edce4;margin-top:12px;line-height:1.5}
+.hidden{display:none!important}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.command-row{display:grid;grid-template-columns:1fr auto auto;gap:8px}
+.mini-form{display:grid;gap:8px}
+.list{margin-top:12px;display:grid;gap:8px}
+.item{padding:9px;border-left:2px solid var(--line);background:rgba(0,0,0,.18)}
+.item small{color:var(--muted)}
+.big-info{font-size:1.05rem;line-height:1.5}
+.kv{line-height:1.7;color:#9edce4;margin-bottom:12px}
+.reactor-wrap{text-align:center;padding:22px 0 4px}
+.reactor{width:160px;height:160px;margin:auto;position:relative;display:grid;place-items:center}
+.ring{position:absolute;border:1px solid var(--line);border-radius:50%;box-shadow:var(--glow)}
+.ring1{inset:0;animation:spin 12s linear infinite}
+.ring2{inset:18px;border-style:dashed;animation:spin 8s linear reverse infinite}
+.ring3{inset:38px;animation:pulse 2s ease-in-out infinite}
+.core{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--line);font-size:2rem;color:#fff;box-shadow:0 0 28px rgba(27,231,255,.55)}
+.system-status{margin-top:10px;color:#8fffff;letter-spacing:.15em;font-size:.8rem}
+.scanlines{pointer-events:none;position:fixed;inset:0;z-index:99;background:repeating-linear-gradient(to bottom,transparent 0,transparent 3px,rgba(0,200,255,.025) 4px)}
+@keyframes spin{to{transform:rotate(360deg)}} @keyframes pulse{50%{transform:scale(1.06);opacity:.65}}
+@media(max-width:720px){.grid{grid-template-columns:1fr}.command-row{grid-template-columns:1fr auto}.command-row #micBtn{grid-column:2}.shell{padding:12px}.topbar{align-items:flex-start;gap:10px}}
+
+.recording{border-color:#ff6565!important;color:#ff9c9c!important;box-shadow:0 0 18px rgba(255,101,101,.35)!important}
+
+.mic-tools{display:grid;grid-template-columns:minmax(180px,1fr) 180px auto;gap:10px;align-items:center;margin-top:10px}
+.mic-tools select{width:100%;background:#031117;color:var(--text);border:1px solid rgba(27,231,255,.35);padding:9px;font:inherit}
+.level-wrap{height:9px;border:1px solid rgba(27,231,255,.4);background:#020b10;overflow:hidden}
+.level-bar{height:100%;width:0%;background:currentColor;color:var(--line);box-shadow:0 0 10px currentColor;transition:width .06s linear}
+#micLevelText{font-size:.72rem;color:var(--muted);min-width:58px;text-align:right}
+@media(max-width:720px){.mic-tools{grid-template-columns:1fr}.level-wrap{width:100%}#micLevelText{text-align:left}}
