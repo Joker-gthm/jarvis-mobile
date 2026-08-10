@@ -13,8 +13,12 @@ const $ = (id) => document.getElementById(id);
 const fmt = (iso) => iso ? new Date(iso).toLocaleString("de-DE", {dateStyle:"medium", timeStyle:"short"}) : "ohne Termin";
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
 let deferredInstallPrompt = null;
-const isStandalone = () => window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+const isStandalone = () =>
+  window.matchMedia("(display-mode: standalone)").matches ||
+  window.navigator.standalone === true;
+
 const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isAndroid = () => /android/i.test(navigator.userAgent);
 
 function hideSplash(){
   const splash = $("splash");
@@ -22,16 +26,11 @@ function hideSplash(){
   setTimeout(()=>splash.classList.add("hide"), 350);
 }
 
-window.addEventListener("beforeinstallprompt", (event)=>{
-  event.preventDefault();
-  deferredInstallPrompt = event;
-  if(!isStandalone()) $("installBtn")?.classList.remove("hidden");
-});
-
-window.addEventListener("appinstalled", ()=>{
-  deferredInstallPrompt = null;
-  $("installBtn")?.classList.add("hidden");
-});
+function setInstallButtonVisible(visible){
+  const btn = $("installBtn");
+  if(!btn) return;
+  btn.classList.toggle("hidden", !visible);
+}
 
 function showInstallHelp(text){
   $("installHelpText").textContent = text;
@@ -39,21 +38,74 @@ function showInstallHelp(text){
   if(dlg?.showModal) dlg.showModal();
 }
 
+/*
+ * WICHTIG:
+ * Der Installieren-Button wird NICHT künstlich eingeblendet.
+ * Er erscheint nur, wenn Chrome/Edge die PWA tatsächlich als installierbar
+ * erkannt und `beforeinstallprompt` ausgelöst hat.
+ */
+window.addEventListener("beforeinstallprompt", (event)=>{
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  console.log("[JARVIS PWA] Installation ist bereit.");
+  if(!isStandalone()) setInstallButtonVisible(true);
+});
+
+window.addEventListener("appinstalled", ()=>{
+  console.log("[JARVIS PWA] App wurde installiert.");
+  deferredInstallPrompt = null;
+  setInstallButtonVisible(false);
+  try{ localStorage.setItem("jarvis_pwa_installed", "1"); }catch(_){}
+});
+
 $("installBtn")?.addEventListener("click", async ()=>{
-  if(isStandalone()) return;
-  if(deferredInstallPrompt){
-    deferredInstallPrompt.prompt();
-    await deferredInstallPrompt.userChoice;
-    deferredInstallPrompt = null;
-    $("installBtn").classList.add("hidden");
+  if(isStandalone()){
+    setInstallButtonVisible(false);
     return;
   }
-  if(isIOS()) showInstallHelp("In Safari unten auf Teilen tippen und anschließend ‘Zum Home-Bildschirm’ wählen.");
-  else showInstallHelp("Öffne das Browser-Menü und wähle ‘App installieren’ oder ‘Zum Startbildschirm hinzufügen’. Falls die Option noch fehlt, lade die Seite einmal neu.");
+
+  // Nur ein echtes Browser-Installationsereignis darf den Button auslösen.
+  if(!deferredInstallPrompt){
+    setInstallButtonVisible(false);
+    return;
+  }
+
+  try{
+    deferredInstallPrompt.prompt();
+    const choice = await deferredInstallPrompt.userChoice;
+    console.log("[JARVIS PWA] Installationsauswahl:", choice?.outcome);
+
+    if(choice?.outcome === "accepted"){
+      setInstallButtonVisible(false);
+    }
+  }catch(err){
+    console.error("[JARVIS PWA] Installationsfehler:", err);
+  }finally{
+    deferredInstallPrompt = null;
+  }
 });
+
 $("installHelpClose")?.addEventListener("click", ()=>$("installHelp")?.close());
 
-if(!isStandalone()) setTimeout(()=>$("installBtn")?.classList.remove("hidden"), 1200);
+// iOS hat kein `beforeinstallprompt`. Dort zeigen wir nur einmal einen
+// echten Hinweis, wie man die App über Safari zum Home-Bildschirm hinzufügt.
+if(isIOS() && !isStandalone()){
+  setTimeout(()=>{
+    try{
+      if(localStorage.getItem("jarvis_ios_install_hint") === "1") return;
+      localStorage.setItem("jarvis_ios_install_hint", "1");
+    }catch(_){}
+    showInstallHelp("Auf iPhone/iPad: In Safari auf Teilen tippen und anschließend „Zum Home-Bildschirm“ wählen.");
+  }, 2600);
+}
+
+// Android: Kein Fake-Button. Wenn Chrome die App noch nicht als installierbar
+// meldet, bleibt der Button unsichtbar. Die Installation kann dann weiterhin
+// über Chrome-Menü → „App installieren“ / „Zum Startbildschirm hinzufügen“
+// angestoßen werden.
+if(isStandalone()) setInstallButtonVisible(false);
+else setInstallButtonVisible(false);
+
 setTimeout(hideSplash, 1800);
 
 

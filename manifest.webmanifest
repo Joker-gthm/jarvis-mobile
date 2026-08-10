@@ -2,7 +2,7 @@
   "id": "./",
   "name": "J.A.R.V.I.S. Mobile",
   "short_name": "JARVIS",
-  "description": "Mobile JARVIS-Oberfläche mit Cloud-Memory, Erinnerungen, Abfallkalender, Wetter und Sprache.",
+  "description": "JARVIS Mobile PWA 3.1 mit Cloud-Memory, Erinnerungen, Abfallkalender, Wetter und Sprache.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

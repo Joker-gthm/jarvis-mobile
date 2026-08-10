@@ -1,4 +1,4 @@
-# J.A.R.V.I.S. Mobile PWA – Phase 3
+# J.A.R.V.I.S. Mobile PWA – Phase 2
 
 Neu:
 - Mikrofonbutton
@@ -146,3 +146,27 @@ Lade den kompletten Inhalt dieses Ordners ins Root des Repositories `jarvis-mobi
 Wichtig: deine funktionierende `config.js` entweder vorher sichern oder in dieser Version wieder mit Project URL und Publishable Key ausfüllen.
 
 Nach dem Upload auf dem Handy die Seite einmal neu laden. Falls noch die alte Version erscheint, Browsercache für die Seite löschen oder die installierte PWA einmal schließen und neu öffnen.
+
+
+## Phase 3.1 – Installationsbutton korrigiert
+
+Der Button `APP INSTALLIEREN` wird jetzt ausschließlich angezeigt, wenn der
+Browser das native PWA-Ereignis `beforeinstallprompt` geliefert hat.
+
+Damit kann nicht mehr der Fall auftreten, dass der Button nur einen Hinweis
+mit `VERSTANDEN` öffnet, obwohl gar keine native Installation verfügbar ist.
+
+### Nach dem GitHub-Upload
+
+1. Alle Dateien aus diesem Paket ins Repository übernehmen.
+2. Die bestehende `config.js` mit deinen eigenen Supabase-Werten beibehalten.
+3. GitHub Pages den neuen Commit deployen lassen.
+4. Auf Android Chrome die Seite neu öffnen.
+5. Wenn nötig: Chrome → Website-Einstellungen → Daten löschen bzw. die Seite
+   vollständig neu laden, damit der alte Service Worker verschwindet.
+6. Sobald Chrome die PWA als installierbar erkennt, erscheint
+   `APP INSTALLIEREN`. Dieser Button öffnet dann den echten Android/Chrome-
+   Installationsdialog.
+
+Wenn der Button nicht erscheint, prüfe zusätzlich Chrome-Menü →
+`App installieren` oder `Zum Startbildschirm hinzufügen`.
