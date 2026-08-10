@@ -4,21 +4,36 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#03141b">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>J.A.R.V.I.S.</title>
+  <title>J.A.R.V.I.S. Mobile</title>
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div id="splash" class="splash" aria-hidden="true">
+    <div class="splash-inner">
+      <img src="icons/icon-512.png" alt="" class="splash-icon">
+      <div class="splash-title">J.A.R.V.I.S.</div>
+      <div class="splash-sub">MOBILE NODE</div>
+      <div class="splash-bar"><span></span></div>
+      <div class="splash-status">INITIALIZING SYSTEMS</div>
+    </div>
+  </div>
   <div class="scanlines"></div>
   <main class="shell">
     <header class="topbar">
       <div>
         <div class="eyebrow">J.A.R.V.I.S. // MOBILE NODE</div>
-        <h1>WILLKOMMEN HERR HAGEN</h1>
+        <h1>WELCOME, HERR HAGEN</h1>
       </div>
-      <div id="connectionBadge" class="badge offline">OFFLINE</div>
+      <div class="header-actions">
+        <button id="installBtn" class="install-btn hidden" type="button">APP INSTALLIEREN</button>
+        <div id="connectionBadge" class="badge offline">OFFLINE</div>
+      </div>
     </header>
 
     <section id="loginPanel" class="panel login-panel">
@@ -92,6 +107,12 @@
       </div>
     </section>
   </main>
+
+  <dialog id="installHelp" class="install-dialog">
+    <div class="panel-title">JARVIS INSTALLIEREN</div>
+    <p id="installHelpText"></p>
+    <button id="installHelpClose" class="primary" type="button">VERSTANDEN</button>
+  </dialog>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>

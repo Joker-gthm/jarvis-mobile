@@ -1,5 +1,5 @@
-const CACHE="jarvis-mobile-v5";
-const ASSETS=["./","index.html","styles.css","app.js","config.js","manifest.webmanifest"];
+const CACHE="jarvis-mobile-v6";
+const ASSETS=["./","index.html","styles.css","app.js","config.js","manifest.webmanifest","icons/icon-192.png","icons/icon-512.png","icons/apple-touch-icon.png","icons/maskable-512.png"];
 
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)));

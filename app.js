@@ -12,6 +12,50 @@ let recordingStartedAt = 0;
 const $ = (id) => document.getElementById(id);
 const fmt = (iso) => iso ? new Date(iso).toLocaleString("de-DE", {dateStyle:"medium", timeStyle:"short"}) : "ohne Termin";
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
+let deferredInstallPrompt = null;
+const isStandalone = () => window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+function hideSplash(){
+  const splash = $("splash");
+  if(!splash) return;
+  setTimeout(()=>splash.classList.add("hide"), 350);
+}
+
+window.addEventListener("beforeinstallprompt", (event)=>{
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  if(!isStandalone()) $("installBtn")?.classList.remove("hidden");
+});
+
+window.addEventListener("appinstalled", ()=>{
+  deferredInstallPrompt = null;
+  $("installBtn")?.classList.add("hidden");
+});
+
+function showInstallHelp(text){
+  $("installHelpText").textContent = text;
+  const dlg = $("installHelp");
+  if(dlg?.showModal) dlg.showModal();
+}
+
+$("installBtn")?.addEventListener("click", async ()=>{
+  if(isStandalone()) return;
+  if(deferredInstallPrompt){
+    deferredInstallPrompt.prompt();
+    await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+    $("installBtn").classList.add("hidden");
+    return;
+  }
+  if(isIOS()) showInstallHelp("In Safari unten auf Teilen tippen und anschließend ‘Zum Home-Bildschirm’ wählen.");
+  else showInstallHelp("Öffne das Browser-Menü und wähle ‘App installieren’ oder ‘Zum Startbildschirm hinzufügen’. Falls die Option noch fehlt, lade die Seite einmal neu.");
+});
+$("installHelpClose")?.addEventListener("click", ()=>$("installHelp")?.close());
+
+if(!isStandalone()) setTimeout(()=>$("installBtn")?.classList.remove("hidden"), 1200);
+setTimeout(hideSplash, 1800);
+
 
 function setConn(ok, text=ok?"CLOUD ONLINE":"OFFLINE"){
   const b=$("connectionBadge"); b.textContent=text; b.className="badge "+(ok?"online":"offline");
@@ -34,6 +78,7 @@ async function init(){
   if(!cfg.SUPABASE_URL || cfg.SUPABASE_URL.includes("HIER_") ||
      !cfg.SUPABASE_PUBLISHABLE_KEY || cfg.SUPABASE_PUBLISHABLE_KEY.includes("HIER_")){
     $("loginStatus").textContent="Bitte zuerst config.js mit Project URL und Publishable Key ausfüllen.";
+    hideSplash();
     return;
   }
   sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_PUBLISHABLE_KEY, {
@@ -47,6 +92,7 @@ async function init(){
   sb.auth.onAuthStateChange(async (_event, session)=>{
     if(session) await enterApp(session.user); else showLogin();
   });
+  hideSplash();
 }
 
 function showLogin(){

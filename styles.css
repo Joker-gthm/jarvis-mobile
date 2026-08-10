@@ -53,3 +53,31 @@ button{font:inherit;cursor:pointer;padding:11px 14px;border-radius:2px;letter-sp
 .level-bar{height:100%;width:0%;background:currentColor;color:var(--line);box-shadow:0 0 10px currentColor;transition:width .06s linear}
 #micLevelText{font-size:.72rem;color:var(--muted);min-width:58px;text-align:right}
 @media(max-width:720px){.mic-tools{grid-template-columns:1fr}.level-wrap{width:100%}#micLevelText{text-align:left}}
+
+html,body{overscroll-behavior-y:none}
+body{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+.header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.install-btn{background:rgba(27,231,255,.11);border:1px solid rgba(27,231,255,.65);color:var(--line);font-size:.7rem;padding:7px 10px;box-shadow:var(--glow)}
+.install-dialog{max-width:420px;width:calc(100% - 32px);background:#031117;color:var(--text);border:1px solid var(--line);box-shadow:0 0 40px rgba(27,231,255,.22);padding:18px}
+.install-dialog::backdrop{background:rgba(0,5,8,.78);backdrop-filter:blur(4px)}
+.install-dialog p{line-height:1.6;color:#bcebf1}
+.splash{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:radial-gradient(circle at 50% 38%,#073142 0,#020b10 45%,#000 100%);transition:opacity .45s ease,visibility .45s ease}
+.splash.hide{opacity:0;visibility:hidden}
+.splash-inner{text-align:center;padding:24px}
+.splash-icon{width:min(42vw,190px);height:auto;border-radius:24%;filter:drop-shadow(0 0 24px rgba(27,231,255,.48));animation:splashPulse 1.6s ease-in-out infinite}
+.splash-title{font-size:clamp(1.8rem,8vw,3.2rem);letter-spacing:.22em;margin-top:22px;color:#eaffff;text-shadow:0 0 18px rgba(27,231,255,.55)}
+.splash-sub{font-size:.8rem;color:var(--line);letter-spacing:.34em;margin-top:8px}
+.splash-bar{width:min(68vw,300px);height:4px;background:#09232d;margin:28px auto 12px;overflow:hidden;border-radius:99px}
+.splash-bar span{display:block;height:100%;width:42%;background:var(--line);box-shadow:0 0 12px rgba(27,231,255,.9);animation:splashLoad 1.1s ease-in-out infinite}
+.splash-status{font-size:.7rem;color:var(--muted);letter-spacing:.18em}
+@keyframes splashPulse{50%{transform:scale(1.04);filter:drop-shadow(0 0 34px rgba(27,231,255,.72))}}
+@keyframes splashLoad{0%{transform:translateX(-120%)}100%{transform:translateX(340%)}}
+@media(max-width:720px){
+  .topbar{position:sticky;top:0;z-index:20;background:rgba(2,11,16,.88);backdrop-filter:blur(10px);padding-top:8px}
+  .topbar h1{font-size:1.15rem}
+  .eyebrow{font-size:.62rem}
+  .install-btn{font-size:.62rem;padding:6px 8px}
+  .panel{border-radius:8px}
+  button{min-height:44px}
+  input,textarea,select{font-size:16px!important}
+}
